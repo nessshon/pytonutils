@@ -1,39 +1,31 @@
-from tonutils.client import ToncenterV3Client
-from tonutils.utils import to_nano
-from tonutils.wallet import (
-    WalletV3R1,
-    # Uncomment the following lines to use different wallet versions:
-    # WalletV3R2,
-    # WalletV4R1,
-    # WalletV4R2,
-    # WalletV5R1,
-    # HighloadWalletV2,
-    # HighloadWalletV3,
-)
+from tonutils.clients import ToncenterClient
+from tonutils.contracts import WalletV4R2
+from tonutils.utils import to_amount
 
-# Set to True for test network, False for main network
 IS_TESTNET = True
 
-# Mnemonic phrase
 MNEMONIC = "word1 word2 word3 ..."
+
+WALLET_ADDRESS = "UQCDrgGaI6gWK-qlyw69xWZosurGxrpRgIgSkVsgahUtxZR0"
 
 
 async def main() -> None:
-    client = ToncenterV3Client(is_testnet=IS_TESTNET, rps=1, max_retries=1)
-    wallet, public_key, private_key, mnemonic = WalletV3R1.from_mnemonic(client, MNEMONIC)
+    client = ToncenterClient(is_testnet=IS_TESTNET, rps=1)
+    wallet = await WalletV4R2.from_address(client, WALLET_ADDRESS)
 
-    # Uncomment and use the following lines to create different wallet versions from mnemonic:
-    # wallet, public_key, private_key, mnemonic = WalletV3R2.from_mnemonic(client, MNEMONIC)
-    # wallet, public_key, private_key, mnemonic = WalletV4R1.from_mnemonic(client, MNEMONIC)
-    # wallet, public_key, private_key, mnemonic = WalletV4R2.from_mnemonic(client, MNEMONIC)
-    # wallet, public_key, private_key, mnemonic = WalletV5R1.from_mnemonic(client, MNEMONIC)
-    # wallet, public_key, private_key, mnemonic = HighloadWalletV2.from_mnemonic(client, MNEMONIC)
-    # wallet, public_key, private_key, mnemonic = HighloadWalletV3.from_mnemonic(client, MNEMONIC)
+    # Or initialize from a mnemonic phrase:
+    # wallet, _, _, _ = WalletV4R2.from_mnemonic(client, MNEMONIC)
 
-    balance = await wallet.balance()
+    # Load the latest on-chain state:
+    await wallet.refresh()
 
-    print(f"Wallet balance (nano): {to_nano(balance)}")
-    print(f"Wallet balance (TON): {balance}")
+    balance = wallet.balance
+    ton_balance = to_amount(balance, decimals=9, precision=4)
+
+    print(f"Wallet balance: {balance}")
+    print(f"Wallet balance: {ton_balance} TON")
+
+    await client.close()
 
 
 if __name__ == "__main__":
