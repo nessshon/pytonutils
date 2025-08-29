@@ -16,13 +16,11 @@ IS_TESTNET = True
 MNEMONIC = "word1 word2 word3 ..."
 
 OWNER_ADDRESS = "UQ..."
+EDITOR_ADDRESS = "UQ..."
 NFT_COLLECTION_ADDRESS = "EQ..."
 
-# Index of the NFT item to be minted
 NFT_ITEM_INDEX = 0
-
-# Prefix URI of the NFT item metadata
-PREFIX_URI = f"{NFT_ITEM_INDEX}.json"
+NFT_ITEM_PREFIX_URI = f"{NFT_ITEM_INDEX}.json"
 
 
 async def main() -> None:
@@ -30,11 +28,11 @@ async def main() -> None:
     wallet, _, _, _ = WalletV4R2.from_mnemonic(client, MNEMONIC)
 
     nft_item_code = NFTItemEditable.get_default_code()
-    nft_item_content = OffchainItemContent(prefix_uri=PREFIX_URI)
+    nft_item_content = OffchainItemContent(prefix_uri=NFT_ITEM_PREFIX_URI)
 
     nft_item_ref = NFTItemEditableMintRef(
         owner_address=OWNER_ADDRESS,
-        editor_address=OWNER_ADDRESS,
+        editor_address=EDITOR_ADDRESS,
         content=nft_item_content,
     )
     body = NFTCollectionMintItemBody(
@@ -45,7 +43,7 @@ async def main() -> None:
 
     tx_hash = await wallet.transfer(
         destination=NFT_COLLECTION_ADDRESS,
-        amount=to_nano(0.025),
+        amount=to_nano(0.05),
         body=body.serialize(),
     )
 

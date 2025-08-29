@@ -6,7 +6,7 @@ IS_TESTNET = True
 
 MNEMONIC = "word1 word2 word3 ..."
 
-WALLET_ADDRESS = "UQCDrgGaI6gWK-qlyw69xWZosurGxrpRgIgSkVsgahUtxZR0"
+WALLET_ADDRESS = "UQ..."
 
 
 async def main() -> None:

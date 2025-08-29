@@ -17,7 +17,6 @@ from tonutils.contracts import (
     # WalletPreprocessedV2,
 )
 
-# Set to True for testnet, False for mainnet
 IS_TESTNET = True
 
 
