@@ -6,7 +6,10 @@ from pyapiq.exceptions import APIQException
 from pytoniq_core import Address, Cell, StateInit
 
 from .codes import CONTRACT_CODES
-from ..exceptions import NotRefreshedError
+from ..exceptions import (
+    NotRefreshedError,
+    ContractError,
+)
 from ..protocols import (
     ClientProtocol,
     ContractProtocol,
@@ -29,7 +32,7 @@ TContract = t.TypeVar("TContract", bound="BaseContract")
 class BaseContract(ContractProtocol[D]):
     _data_model: t.Type[D]
 
-    VERSION: t.ClassVar[BaseContractVersion]
+    VERSION: t.ClassVar[t.Union[BaseContractVersion, str]]
 
     def __init__(
         self,
@@ -135,7 +138,16 @@ class BaseContract(ContractProtocol[D]):
         data: Cell,
         workchain: WorkchainID = WorkchainID.BASECHAIN,
     ) -> TContract:
-        code = to_cell(CONTRACT_CODES[cls.VERSION])
+        try:
+            code_raw = CONTRACT_CODES[cls.VERSION]
+        except KeyError:
+            raise ContractError(
+                cls,
+                f"Unknown contract code for VERSION {cls.VERSION!r}. "
+                f"Use {cls.__name__}.from_code_and_data(...) instead.",
+            )
+
+        code = to_cell(code_raw)
         return cls.from_code_and_data(client, code, data, workchain)
 
     @classmethod
