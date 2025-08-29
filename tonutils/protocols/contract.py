@@ -22,7 +22,7 @@ TContract = t.TypeVar("TContract")
 class ContractProtocol(t.Protocol[D]):
     _data_model: t.Type[D]
 
-    VERSION: t.ClassVar[BaseContractVersion]
+    VERSION: t.ClassVar[t.Union[BaseContractVersion, str]]
 
     @property
     def client(self) -> ClientProtocol: ...

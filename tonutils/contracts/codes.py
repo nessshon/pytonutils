@@ -7,7 +7,7 @@ from ..types import (
     NFTItemVersion,
 )
 
-CONTRACT_CODES: t.Dict[BaseContractVersion, str] = {
+CONTRACT_CODES: t.Dict[t.Union[BaseContractVersion, str], str] = {
     WalletVersion.WalletV1R1: "b5ee9c72010101010044000084ff0020dda4f260810200d71820d70b1fed44d0d31fd3ffd15112baf2a122f901541044f910f2a2f80001d31f3120d74a96d307d402fb00ded1a4c8cb1fcbffc9ed54",
     WalletVersion.WalletV1R2: "b5ee9c720101010100530000a2ff0020dd2082014c97ba9730ed44d0d70b1fe0a4f260810200d71820d70b1fed44d0d31fd3ffd15112baf2a122f901541044f910f2a2f80001d31f3120d74a96d307d402fb00ded1a4c8cb1fcbffc9ed54",
     WalletVersion.WalletV1R3: "b5ee9c7201010101005f0000baff0020dd2082014c97ba218201339cbab19c71b0ed44d0d31fd70bffe304e0a4f260810200d71820d70b1fed44d0d31fd3ffd15112baf2a122f901541044f910f2a2f80001d31f3120d74a96d307d402fb00ded1a4c8cb1fcbffc9ed54",
