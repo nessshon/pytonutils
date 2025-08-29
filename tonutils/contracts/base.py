@@ -7,20 +7,20 @@ from pytoniq_core import Address, Cell, StateInit
 
 from .codes import CONTRACT_CODES
 from ..exceptions import (
-    NotRefreshedError,
     ContractError,
+    NotRefreshedError,
 )
 from ..protocols import (
     ClientProtocol,
     ContractProtocol,
 )
 from ..types import (
-    ContractStateInfo,
-    WorkchainID,
     AddressLike,
-    ContractState,
-    BaseContractVersion,
     BaseContractData,
+    BaseContractVersion,
+    ContractStateInfo,
+    ContractState,
+    WorkchainID,
 )
 from ..utils import to_cell
 
@@ -33,6 +33,16 @@ class BaseContract(ContractProtocol[D]):
     _data_model: t.Type[D]
 
     VERSION: t.ClassVar[t.Union[BaseContractVersion, str]]
+
+    @classmethod
+    def get_default_code(cls) -> Cell:
+        try:
+            default_code = to_cell(CONTRACT_CODES[cls.VERSION])
+        except KeyError:
+            raise ContractError(
+                cls, f"No contract code defined for VERSION {cls.VERSION!r}."
+            )
+        return default_code
 
     def __init__(
         self,
@@ -138,16 +148,7 @@ class BaseContract(ContractProtocol[D]):
         data: Cell,
         workchain: WorkchainID = WorkchainID.BASECHAIN,
     ) -> TContract:
-        try:
-            code_raw = CONTRACT_CODES[cls.VERSION]
-        except KeyError:
-            raise ContractError(
-                cls,
-                f"Unknown contract code for VERSION {cls.VERSION!r}. "
-                f"Use {cls.__name__}.from_code_and_data(...) instead.",
-            )
-
-        code = to_cell(code_raw)
+        code = cls.get_default_code()
         return cls.from_code_and_data(client, code, data, workchain)
 
     @classmethod

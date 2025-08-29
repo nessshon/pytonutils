@@ -121,7 +121,7 @@ class BaseWallet(BaseContract, WalletProtocol[D, C, P], abc.ABC):
             raise ContractError(
                 self,
                 f"Cannot sign message: "
-                f"`private_key` is not set for wallet `{self.VERSION.value}`.",
+                f"`private_key` is not set for wallet `{self.VERSION!r}`.",
             )
         signed_msg = await self._build_msg_cell(messages, params)
         signature = sign_message(signed_msg.hash, self._private_key.keypair.bytes)
@@ -205,7 +205,7 @@ class BaseWallet(BaseContract, WalletProtocol[D, C, P], abc.ABC):
     async def transfer(
         self,
         destination: AddressLike,
-        value: int,
+        amount: int,
         body: t.Optional[t.Union[Cell, str]] = None,
         state_init: t.Optional[StateInit] = None,
         send_mode: t.Optional[t.Union[SendMode, int]] = None,
@@ -214,7 +214,7 @@ class BaseWallet(BaseContract, WalletProtocol[D, C, P], abc.ABC):
     ) -> str:
         message = TransferMessage(
             destination=destination,
-            value=value,
+            amount=amount,
             body=body,
             state_init=state_init,
             send_mode=send_mode,
@@ -256,7 +256,7 @@ class BaseWallet(BaseContract, WalletProtocol[D, C, P], abc.ABC):
         if not isinstance(config, cls._config_model):
             raise ContractError(
                 cls,
-                f"Invalid contract config type for `{cls.VERSION.value}`. "
+                f"Invalid contract config type for `{cls.VERSION!r}`. "
                 f"Expected {cls._config_model.__name__}, "
                 f"got {type(config).__name__}.",
             )
@@ -269,7 +269,7 @@ class BaseWallet(BaseContract, WalletProtocol[D, C, P], abc.ABC):
         if params is not None and not isinstance(params, cls._params_model):
             raise ContractError(
                 cls,
-                f"Invalid params type for `{cls.VERSION.value}`. "
+                f"Invalid params type for `{cls.VERSION!r}`. "
                 f"Expected {cls._params_model.__name__}, "
                 f"got {type(params).__name__ if params is not None else 'None'}.",
             )
@@ -282,7 +282,7 @@ class BaseWallet(BaseContract, WalletProtocol[D, C, P], abc.ABC):
         if len(messages) > cls.MAX_MESSAGES:
             raise ContractError(
                 cls.__name__,
-                f"For `{cls.VERSION.value}`, "
+                f"For `{cls.VERSION!r}`, "
                 f"maximum messages amount is {cls.MAX_MESSAGES}, "
                 f"but got {len(messages)}.",
             )

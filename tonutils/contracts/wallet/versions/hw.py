@@ -120,18 +120,18 @@ class WalletHighloadV3R1(
             rest = self._build_msg_to_send(messages[msgs_per_pack:], params)
             messages = messages[:msgs_per_pack] + [rest]
 
-        actions_cell, value = Cell.empty(), 0
+        actions_cell, amount = Cell.empty(), 0
         for msg in messages:
             action = OutActionSendMsg(msg)
             action_cell = begin_cell()
             action_cell.store_ref(actions_cell)
             action_cell.store_cell(action.serialize())
             actions_cell = action_cell.end_cell()
-            value += msg.message.info.value.grams
+            amount += msg.message.info.value.grams
 
-        value = params.value_to_send if params.value_to_send is not None else value
+        amount = params.value_to_send if params.value_to_send is not None else amount
         body = self._build_internal_transfer(actions_cell, params)
-        return build_internal_wallet_msg(self.address, params.send_mode, value, body)
+        return build_internal_wallet_msg(self.address, params.send_mode, amount, body)
 
     async def _build_msg_cell(
         self,
