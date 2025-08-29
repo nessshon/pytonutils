@@ -34,7 +34,7 @@ class TransferMessage(BaseTransferMessage):
     def __init__(
         self,
         destination: AddressLike,
-        value: int,
+        amount: int,
         body: t.Optional[t.Union[Cell, str]] = None,
         state_init: t.Optional[StateInit] = None,
         send_mode: t.Optional[t.Union[SendMode, int]] = None,
@@ -46,7 +46,7 @@ class TransferMessage(BaseTransferMessage):
             body = TextComment(body).serialize()
 
         self.destination = destination
-        self.value = value
+        self.amount = amount
         self.body = body
         self.state_init = state_init
         self.send_mode = send_mode
@@ -60,7 +60,7 @@ class TransferMessage(BaseTransferMessage):
 
         return build_internal_wallet_msg(
             dest=self.destination,
-            value=self.value,
+            value=self.amount,
             body=self.body,
             state_init=self.state_init,
             send_mode=self.send_mode,
@@ -77,7 +77,7 @@ class TransferNFTMessage(BaseTransferMessage):
         response_address: t.Optional[AddressLike] = None,
         forward_payload: t.Optional[t.Union[Cell, str]] = None,
         forward_amount: t.Union[int, float] = 1,
-        value: t.Union[int, float] = to_nano(0.05),
+        amount: t.Union[int, float] = to_nano(0.05),
         send_mode: t.Optional[t.Union[SendMode, int]] = None,
         bounce: t.Optional[bool] = None,
     ) -> None:
@@ -91,7 +91,7 @@ class TransferNFTMessage(BaseTransferMessage):
         self.response_address = response_address
         self.forward_payload = forward_payload
         self.forward_amount = forward_amount
-        self.value = value
+        self.amount = amount
         self.send_mode = send_mode
         self.bounce = bounce
 
@@ -113,7 +113,7 @@ class TransferJettonMessage(BaseTransferMessage):
         jetton_wallet_address: t.Optional[AddressLike] = None,
         forward_payload: t.Optional[t.Union[Cell, str]] = None,
         forward_amount: t.Union[int, float] = 1,
-        value: t.Union[int, float] = to_nano(0.05),
+        amount: t.Union[int, float] = to_nano(0.05),
         send_mode: t.Optional[t.Union[SendMode, int]] = None,
         bounce: t.Optional[bool] = None,
     ) -> None:
@@ -131,7 +131,7 @@ class TransferJettonMessage(BaseTransferMessage):
         self.jetton_wallet_address = jetton_wallet_address
         self.forward_payload = forward_payload
         self.forward_amount = forward_amount
-        self.value = value
+        self.amount = amount
         self.send_mode = send_mode
         self.bounce = bounce
 

@@ -311,7 +311,7 @@ class NFTItemSoulboundMintRef(TlbScheme):
         )
 
 
-class NFTCollectionMintItem(TlbScheme):
+class NFTCollectionMintItemBody(TlbScheme):
     OP_CODE = 1
 
     def __init__(
@@ -336,7 +336,7 @@ class NFTCollectionMintItem(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTCollectionMintItem:
+    def deserialize(cls, cs: Slice) -> NFTCollectionMintItemBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(
@@ -348,7 +348,7 @@ class NFTCollectionMintItem(TlbScheme):
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTCollectionBatchMintItem(TlbScheme):
+class NFTCollectionBatchMintItemBody(TlbScheme):
     OP_CODE = 2
 
     def __init__(
@@ -391,7 +391,7 @@ class NFTCollectionBatchMintItem(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTCollectionBatchMintItem:
+    def deserialize(cls, cs: Slice) -> NFTCollectionBatchMintItemBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             query_id = cs.load_uint(64)
@@ -405,7 +405,7 @@ class NFTCollectionBatchMintItem(TlbScheme):
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTCollectionEditableChangeOwner(TlbScheme):
+class NFTCollectionEditableChangeOwnerBody(TlbScheme):
     OP_CODE = 3
 
     def __init__(
@@ -424,7 +424,7 @@ class NFTCollectionEditableChangeOwner(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTCollectionEditableChangeOwner:
+    def deserialize(cls, cs: Slice) -> NFTCollectionEditableChangeOwnerBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(
@@ -434,7 +434,7 @@ class NFTCollectionEditableChangeOwner(TlbScheme):
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTCollectionEditableChangeContent(TlbScheme):
+class NFTCollectionEditableChangeContentBody(TlbScheme):
     OP_CODE = 4
 
     def __init__(
@@ -456,7 +456,7 @@ class NFTCollectionEditableChangeContent(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTCollectionEditableChangeContent:
+    def deserialize(cls, cs: Slice) -> NFTCollectionEditableChangeContentBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(
@@ -467,7 +467,7 @@ class NFTCollectionEditableChangeContent(TlbScheme):
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTItemEditableEditContent(TlbScheme):
+class NFTItemEditableEditContentBody(TlbScheme):
     OP_CODE = OpCode.NFT_ITEM_EDIT_CONTENT
 
     def __init__(
@@ -486,7 +486,7 @@ class NFTItemEditableEditContent(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTItemEditableEditContent:
+    def deserialize(cls, cs: Slice) -> NFTItemEditableEditContentBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(
@@ -496,7 +496,7 @@ class NFTItemEditableEditContent(TlbScheme):
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTItemEditableTransferEditorship(TlbScheme):
+class NFTItemEditableTransferEditorshipBody(TlbScheme):
     OP_CODE = OpCode.NFT_ITEM_TRANSFER_EDITORSHIP
 
     def __init__(
@@ -527,7 +527,7 @@ class NFTItemEditableTransferEditorship(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTItemEditableTransferEditorship:
+    def deserialize(cls, cs: Slice) -> NFTItemEditableTransferEditorshipBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(
@@ -541,7 +541,7 @@ class NFTItemEditableTransferEditorship(TlbScheme):
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTItemSoulboundDestory(TlbScheme):
+class NFTItemSoulboundDestoryBody(TlbScheme):
     OP_CODE = OpCode.NFT_ITEM_DESTORY
 
     def __init__(self, query_id: int = 0) -> None:
@@ -554,14 +554,14 @@ class NFTItemSoulboundDestory(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTItemSoulboundDestory:
+    def deserialize(cls, cs: Slice) -> NFTItemSoulboundDestoryBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(query_id=cs.load_uint(64))
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTItemSoulboundRevoke(TlbScheme):
+class NFTItemSoulboundRevokeBody(TlbScheme):
     OP_CODE = OpCode.NFT_ITEM_REVOKE
 
     def __init__(self, query_id: int = 0) -> None:
@@ -574,14 +574,14 @@ class NFTItemSoulboundRevoke(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTItemSoulboundRevoke:
+    def deserialize(cls, cs: Slice) -> NFTItemSoulboundRevokeBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(query_id=cs.load_uint(64))
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTItemTransfer(TlbScheme):
+class NFTItemTransferBody(TlbScheme):
     OP_CODE = OpCode.NFT_ITEM_TRANSFER
 
     def __init__(
@@ -612,7 +612,7 @@ class NFTItemTransfer(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTItemTransfer:
+    def deserialize(cls, cs: Slice) -> NFTItemTransferBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(
