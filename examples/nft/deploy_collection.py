@@ -1,18 +1,17 @@
 from tonutils.clients import ToncenterClient
 from tonutils.contracts import (
-    CONTRACT_CODES,
+    NFTCollectionEditable,
+    NFTItemEditable,
     WalletV4R2,
-    NFTCollectionStandard,
 )
 from tonutils.types import (
-    NFTCollectionData,
     NFTCollectionContent,
-    NFTItemVersion,
-    OffchainContent,
+    NFTCollectionData,
     OffchainCommonContent,
+    OffchainContent,
     RoyaltyParams,
 )
-from tonutils.utils import to_cell, to_nano
+from tonutils.utils import to_nano
 
 IS_TESTNET = True
 
@@ -34,34 +33,37 @@ async def main() -> None:
     client = ToncenterClient(is_testnet=IS_TESTNET, rps=1)
     wallet, _, _, _ = WalletV4R2.from_mnemonic(client, MNEMONIC)
 
-    nft_item_code = to_cell(CONTRACT_CODES[NFTItemVersion.NFTItemSoulbound])
+    nft_item_code = NFTItemEditable.get_default_code()
 
+    collection_content = NFTCollectionContent(
+        content=OffchainContent(uri=URI),
+        common_content=OffchainCommonContent(suffix_uri=SUFFIX_URI),
+    )
+    royalty_params = RoyaltyParams(
+        royalty=ROYALTY,
+        denominator=ROYALTY_DENOMINATOR,
+        address=ROYALTY_ADDRESS,
+    )
     collection_data = NFTCollectionData(
         owner_address=OWNER_ADDRESS,
-        content=NFTCollectionContent(
-            content=OffchainContent(uri=URI),
-            common_content=OffchainCommonContent(suffix_uri=SUFFIX_URI),
-        ),
-        royalty_params=RoyaltyParams(
-            royalty=ROYALTY,
-            denominator=ROYALTY_DENOMINATOR,
-            address=ROYALTY_ADDRESS,
-        ),
+        content=collection_content,
+        royalty_params=royalty_params,
         nft_item_code=nft_item_code,
     )
-
-    collection = NFTCollectionStandard.from_data(
+    collection = NFTCollectionEditable.from_data(
         client=client,
         data=collection_data.serialize(),
     )
 
+    collection_address = collection.address.to_str(is_test_only=IS_TESTNET)
+
     tx_hash = await wallet.transfer(
         destination=collection.address,
-        value=to_nano(0.05),
+        amount=to_nano(0.05),
         state_init=collection.state_init,
     )
 
-    print(f"Collection address: {collection.address.to_str(is_test_only=IS_TESTNET)}")
+    print(f"NFT Collection address: {collection_address}")
     print(f"Transaction hash: {tx_hash}")
 
     await client.close()

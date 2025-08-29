@@ -11,7 +11,7 @@ async def main() -> None:
     wallet, _, _, _ = WalletV4R2.from_mnemonic(client, MNEMONIC, validate=False)
 
     # Any outgoing transaction will deploy the wallet contract if needed.
-    tx_hash = await wallet.transfer(destination=wallet.address, value=0)
+    tx_hash = await wallet.transfer(destination=wallet.address, amount=0)
 
     print(f"Wallet address: {wallet.address.to_str(is_bounceable=False)}")
     print(f"Transaction hash: {tx_hash}")
