@@ -85,7 +85,7 @@ class WalletProtocol(ContractProtocol, t.Protocol[D, C, P]):
     async def transfer(
         self: TWallet,
         destination: AddressLike,
-        value: int,
+        amount: int,
         body: t.Optional[t.Union[Cell, str]] = None,
         state_init: t.Optional[StateInit] = None,
         send_mode: t.Optional[t.Union[SendMode, int]] = None,

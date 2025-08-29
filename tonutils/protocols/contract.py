@@ -24,6 +24,9 @@ class ContractProtocol(t.Protocol[D]):
 
     VERSION: t.ClassVar[t.Union[BaseContractVersion, str]]
 
+    @classmethod
+    def get_default_code(cls) -> Cell: ...
+
     @property
     def client(self) -> ClientProtocol: ...
 
