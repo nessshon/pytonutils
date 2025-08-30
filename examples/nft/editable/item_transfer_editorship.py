@@ -2,7 +2,7 @@ from pytoniq_core import Address
 
 from tonutils.clients import ToncenterClient
 from tonutils.contracts import WalletV4R2
-from tonutils.types import NFTItemEditableTransferEditorshipBody
+from tonutils.types import NFTTransferEditorshipBody
 from tonutils.utils import to_nano
 
 IS_TESTNET = True
@@ -17,7 +17,7 @@ async def main() -> None:
     client = ToncenterClient(is_testnet=IS_TESTNET, rps=1)
     wallet, _, _, _ = WalletV4R2.from_mnemonic(client, MNEMONIC)
 
-    body = NFTItemEditableTransferEditorshipBody(
+    body = NFTTransferEditorshipBody(
         editor_address=EDITOR_ADDRESS,
         response_address=wallet.address,
     )

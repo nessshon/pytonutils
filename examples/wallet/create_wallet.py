@@ -16,13 +16,27 @@ from tonutils.contracts import (
     # WalletHighloadV3R1,
     # WalletPreprocessedV2,
 )
+from tonutils.types import (
+    # WalletV1Config,
+    # WalletV2Config,
+    # WalletV3Config,
+    WalletV4Config,
+    # WalletV5BetaConfig,
+    # WalletV5Config,
+    # WalletHighloadV2Config,
+    # WalletHighloadV3Config,
+    # WalletPreprocessedV2Config,
+)
 
 IS_TESTNET = True
 
 
 def main() -> None:
     client = ToncenterClient(is_testnet=IS_TESTNET, rps=1)
-    wallet, public_key, private_key, mnemonic = WalletV4R2.create(client)
+
+    config = WalletV4Config()
+    wallet, public_key, private_key, mnemonic = WalletV4R2.create(client, config=config)
+
     address = wallet.address.to_str(is_bounceable=False, is_test_only=IS_TESTNET)
 
     print(f"Address: {address}")

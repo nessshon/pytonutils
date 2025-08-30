@@ -2,7 +2,7 @@ from pytoniq_core import Address
 
 from tonutils.clients import ToncenterClient
 from tonutils.contracts import WalletV4R2
-from tonutils.types import NFTItemSoulboundDestoryBody
+from tonutils.types import NFTDestoryBody
 from tonutils.utils import to_nano
 
 IS_TESTNET = True
@@ -16,7 +16,7 @@ async def main() -> None:
     client = ToncenterClient(is_testnet=IS_TESTNET, rps=1)
     wallet, _, _, _ = WalletV4R2.from_mnemonic(client, MNEMONIC)
 
-    body = NFTItemSoulboundDestoryBody()
+    body = NFTDestoryBody()
 
     tx_hash = await wallet.transfer(
         destination=NFT_ITEM_ADDRESS,

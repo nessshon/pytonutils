@@ -3,7 +3,7 @@ from pytoniq_core import Address
 from tonutils.clients import ToncenterClient
 from tonutils.contracts import WalletV4R2
 from tonutils.types import (
-    NFTItemEditableEditContentBody,
+    NFTEditContentBody,
     OffchainItemContent,
 )
 from tonutils.utils import to_nano
@@ -22,7 +22,7 @@ async def main() -> None:
     wallet, _, _, _ = WalletV4R2.from_mnemonic(client, MNEMONIC)
 
     nft_item_content = OffchainItemContent(prefix_uri=PREFIX_URI)
-    body = NFTItemEditableEditContentBody(content=nft_item_content)
+    body = NFTEditContentBody(content=nft_item_content)
 
     tx_hash = await wallet.transfer(
         destination=NFT_ITEM_ADDRESS,

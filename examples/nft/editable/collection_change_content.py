@@ -4,7 +4,7 @@ from tonutils.clients import ToncenterClient
 from tonutils.contracts import WalletV4R2
 from tonutils.types import (
     NFTCollectionContent,
-    NFTCollectionEditableChangeContentBody,
+    NFTCollectionChangeContentBody,
     OffchainCommonContent,
     OffchainContent,
     RoyaltyParams,
@@ -40,7 +40,7 @@ async def main() -> None:
         denominator=ROYALTY_DENOMINATOR,
         address=ROYALTY_ADDRESS,
     )
-    body = NFTCollectionEditableChangeContentBody(
+    body = NFTCollectionChangeContentBody(
         content=nft_collection_content,
         royalty_params=royalty_params,
     )
