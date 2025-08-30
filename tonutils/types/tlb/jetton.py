@@ -1,7 +1,16 @@
 from __future__ import annotations
 
-from pytoniq_core import Cell, Slice, begin_cell
+import typing as t
 
+from pytoniq_core import (
+    Cell,
+    Slice,
+    begin_cell,
+    TlbScheme,
+)
+
+from .. import OpCode
+from ...exceptions import UnexpectedOpCodeError
 from ...types.common import AddressLike
 from ...types.tlb.content import (
     ContentLike,
@@ -185,3 +194,52 @@ class JettonWalletStablecoinV2Data(BaseContractData):
             owner_address=cs.load_address(),
             jetton_master_address=cs.load_address(),
         )
+
+
+class JettonTransferBody(TlbScheme):
+    OP_CODE = OpCode.JETTON_TRANSFER
+
+    def __init__(
+        self,
+        jetton_amount: int,
+        recipient_address: AddressLike,
+        response_address: t.Optional[AddressLike],
+        custom_payload: t.Optional[Cell] = None,
+        forward_payload: t.Optional[Cell] = None,
+        forward_amount: int = 1,
+        query_id: int = 0,
+    ) -> None:
+        self.jetton_amount = jetton_amount
+        self.recipient_address = recipient_address
+        self.response_address = response_address
+        self.custom_payload = custom_payload
+        self.forward_payload = forward_payload
+        self.forward_amount = forward_amount
+        self.query_id = query_id
+
+    def serialize(self) -> Cell:
+        cell = begin_cell()
+        cell.store_uint(self.OP_CODE, 32)
+        cell.store_uint(self.query_id, 64)
+        cell.store_coins(self.jetton_amount)
+        cell.store_address(self.recipient_address)
+        cell.store_address(self.response_address)
+        cell.store_maybe_ref(self.custom_payload)
+        cell.store_coins(self.forward_amount)
+        cell.store_maybe_ref(self.forward_payload)
+        return cell.end_cell()
+
+    @classmethod
+    def deserialize(cls, cs: Slice) -> JettonTransferBody:
+        op_code = cs.load_uint(32)
+        if op_code == cls.OP_CODE:
+            return cls(
+                query_id=cs.load_uint(64),
+                jetton_amount=cs.load_coins(),
+                recipient_address=cs.load_address(),
+                response_address=cs.load_address(),
+                custom_payload=cs.load_maybe_ref(),
+                forward_amount=cs.load_coins(),
+                forward_payload=cs.load_maybe_ref(),
+            )
+        raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
