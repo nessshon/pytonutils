@@ -77,3 +77,15 @@ class NFTItemVersion(BaseContractVersion):
 class NFTItemSingleVersion(BaseContractVersion):
     NFTItemEditableSingle = "nft_item_editable_single"
     NFTItemSoulboundSingle = "nft_item_soulbound_single"
+
+
+class JettonMasterVersion(BaseContractVersion):
+    JettonMasterStandard = "jetton_master_standard"
+    JettonMasterStablecoin = "jetton_master_stablecoin"
+    JettonMasterStablecoinV2 = "jetton_master_stablecoin_v2"
+
+
+class JettonWalletVersion(BaseContractVersion):
+    JettonWalletStandard = "jetton_wallet_standard"
+    JettonWalletStablecoin = "jetton_wallet_stablecoin"
+    JettonWalletStablecoinV2 = "jetton_wallet_stablecoin_v2"

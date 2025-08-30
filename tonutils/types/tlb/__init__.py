@@ -3,6 +3,13 @@ from .content import (
     OnchainContent,
 )
 from .contract import BaseContractData
+from .jetton import (
+    JettonMasterStandardData,
+    JettonMasterStablecoinData,
+    JettonWalletStandardData,
+    JettonWalletStablecoinData,
+    JettonWalletStablecoinV2Data,
+)
 from .msg import OutActionSendMsg
 from .nft import (
     NFTCollectionContent,
@@ -48,8 +55,12 @@ from .wallet import (
 __all__ = [
     "BaseContractData",
     "BaseWalletData",
-    "NFTCollectionContent",
     "EncryptedTextComment",
+    "JettonMasterStandardData",
+    "JettonMasterStablecoinData",
+    "JettonWalletStandardData",
+    "JettonWalletStablecoinData",
+    "JettonWalletStablecoinV2Data",
     "NFTCollectionContent",
     "NFTCollectionData",
     "NFTCollectionEditableChangeContentBody",

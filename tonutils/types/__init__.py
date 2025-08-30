@@ -23,12 +23,14 @@ from .configs import (
     WalletV5Config,
 )
 from .contract import (
+    BaseContractVersion,
     ContractStateInfo,
     ContractState,
-    BaseContractVersion,
-    WalletVersion,
+    JettonMasterVersion,
+    JettonWalletVersion,
     NFTItemVersion,
     NFTCollectionVersion,
+    WalletVersion,
 )
 from .keystructs import (
     KeyLike,
@@ -62,6 +64,11 @@ from .stack import (
 from .tlb import (
     BaseContractData,
     BaseWalletData,
+    JettonMasterStandardData,
+    JettonMasterStablecoinData,
+    JettonWalletStandardData,
+    JettonWalletStablecoinData,
+    JettonWalletStablecoinV2Data,
     NFTCollectionContent,
     NFTCollectionData,
     NFTCollectionEditableChangeContentBody,
@@ -113,6 +120,13 @@ __all__ = [
     "ContractStateInfo",
     "ContractState",
     "EncryptedTextComment",
+    "JettonMasterStandardData",
+    "JettonMasterStablecoinData",
+    "JettonMasterVersion",
+    "JettonWalletStandardData",
+    "JettonWalletStablecoinData",
+    "JettonWalletStablecoinV2Data",
+    "JettonWalletVersion",
     "MetadataPrefix",
     "NetworkGlobalID",
     "NFTCollectionVersion",
