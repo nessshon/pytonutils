@@ -12,6 +12,7 @@ from .get_methods import NFTCollectionGetMethods
 from ..base import BaseContract
 from ...types import (
     AddressLike,
+    ContentLike,
     NFTCollectionContent,
     NFTCollectionData,
     NFTCollectionVersion,
@@ -60,7 +61,7 @@ class BaseNFTCollection(BaseContract[NFTCollectionData]):
 
     async def get_collection_data(self) -> t.Tuple[
         int,
-        t.Union[OnchainContent, OffchainContent],
+        ContentLike,
         t.Optional[Address],
     ]:
         method_result = await NFTCollectionGetMethods.get_collection_data(

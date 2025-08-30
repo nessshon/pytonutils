@@ -14,6 +14,7 @@ from ...exceptions import UnexpectedOpCodeError
 from ...types.common import AddressLike
 from ...types.opcodes import OpCode
 from ...types.tlb.content import (
+    ContentLike,
     MetadataPrefix,
     OnchainContent,
     OffchainContent,
@@ -55,7 +56,7 @@ class NFTCollectionContent(TlbScheme):
 
     def __init__(
         self,
-        content: t.Union[OnchainContent, OffchainContent],
+        content: ContentLike,
         common_content: OffchainCommonContent,
     ) -> None:
         self.content = content

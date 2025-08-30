@@ -13,6 +13,7 @@ from .get_methods import JettonMasterGetMethods
 from ..base import BaseContract
 from ...types import (
     AddressLike,
+    ContentLike,
     MetadataPrefix,
     OnchainContent,
     OffchainContent,
@@ -42,8 +43,8 @@ C = t.TypeVar(
 DStandard = t.TypeVar("DStandard", bound=JettonMasterStandardData)
 DStablecoin = t.TypeVar("DStablecoin", bound=JettonMasterStablecoinData)
 
-CStandard = t.TypeVar("CStandard", bound=t.Union[OnchainContent, OffchainContent])
-CStablecoin = t.TypeVar("CStablecoin", bound=OffchainContent)
+CStandard = t.TypeVar("CStandard", bound=ContentLike)
+CStablecoin = t.TypeVar("CStablecoin", bound=OnchainContent)
 
 
 class BaseJettonMaster(BaseContract[D], t.Generic[D, C], abc.ABC):
@@ -122,7 +123,7 @@ class JettonMasterStandard(BaseJettonMaster[DStandard, CStandard]):
         int,
         bool,
         Address,
-        t.Union[OnchainContent, OffchainContent],
+        ContentLike,
         Cell,
     ]:
         method_result = await JettonMasterGetMethods.get_jetton_data(
@@ -165,7 +166,7 @@ class JettonMasterStablecoin(BaseJettonMaster[DStablecoin, CStablecoin]):
         int,
         bool,
         Address,
-        OffchainContent,
+        OnchainContent,
         Cell,
     ]:
         method_result = await JettonMasterGetMethods.get_jetton_data(
@@ -177,7 +178,7 @@ class JettonMasterStablecoin(BaseJettonMaster[DStablecoin, CStablecoin]):
             method_result[0],
             bool(method_result[1]),
             method_result[2],
-            OffchainContent.deserialize(content_cs, False),
+            OnchainContent.deserialize(content_cs, True),
             method_result[4],
         )
 

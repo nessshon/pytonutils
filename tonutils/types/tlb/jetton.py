@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import typing as t
-
 from pytoniq_core import Cell, Slice, begin_cell
 
 from ...types.common import AddressLike
 from ...types.tlb.content import (
+    ContentLike,
     MetadataPrefix,
     OnchainContent,
     OffchainContent,
@@ -18,7 +17,7 @@ class JettonMasterStandardData(BaseContractData):
     def __init__(
         self,
         admin_address: AddressLike,
-        content: t.Union[OnchainContent, OffchainContent],
+        content: ContentLike,
         jetton_wallet_code: Cell,
         total_supply: int = 0,
     ) -> None:

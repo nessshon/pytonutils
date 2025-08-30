@@ -1,4 +1,5 @@
 from .content import (
+    ContentLike,
     OffchainContent,
     OnchainContent,
 )
@@ -55,6 +56,7 @@ from .wallet import (
 __all__ = [
     "BaseContractData",
     "BaseWalletData",
+    "ContentLike",
     "EncryptedTextComment",
     "JettonMasterStandardData",
     "JettonMasterStablecoinData",

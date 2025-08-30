@@ -64,6 +64,7 @@ from .stack import (
 from .tlb import (
     BaseContractData,
     BaseWalletData,
+    ContentLike,
     JettonMasterStandardData,
     JettonMasterStablecoinData,
     JettonWalletStandardData,
@@ -119,6 +120,7 @@ __all__ = [
     "BaseWalletParams",
     "ContractStateInfo",
     "ContractState",
+    "ContentLike",
     "EncryptedTextComment",
     "JettonMasterStandardData",
     "JettonMasterStablecoinData",

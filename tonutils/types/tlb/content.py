@@ -154,3 +154,6 @@ class OffchainItemContent(TlbScheme):
         cell = begin_cell()
         cell.store_snake_string(self.prefix_uri)
         return cell.end_cell()
+
+
+ContentLike = t.Union[OnchainContent, OffchainContent]
