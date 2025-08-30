@@ -414,7 +414,7 @@ class NFTCollectionBatchMintItemBody(TlbScheme):
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTCollectionEditableChangeOwnerBody(TlbScheme):
+class NFTCollectionChangeOwnerBody(TlbScheme):
     OP_CODE = 3
 
     def __init__(
@@ -433,7 +433,7 @@ class NFTCollectionEditableChangeOwnerBody(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTCollectionEditableChangeOwnerBody:
+    def deserialize(cls, cs: Slice) -> NFTCollectionChangeOwnerBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(
@@ -443,7 +443,7 @@ class NFTCollectionEditableChangeOwnerBody(TlbScheme):
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTCollectionEditableChangeContentBody(TlbScheme):
+class NFTCollectionChangeContentBody(TlbScheme):
     OP_CODE = 4
 
     def __init__(
@@ -465,7 +465,7 @@ class NFTCollectionEditableChangeContentBody(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTCollectionEditableChangeContentBody:
+    def deserialize(cls, cs: Slice) -> NFTCollectionChangeContentBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(
@@ -476,8 +476,8 @@ class NFTCollectionEditableChangeContentBody(TlbScheme):
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTItemEditableEditContentBody(TlbScheme):
-    OP_CODE = OpCode.NFT_ITEM_EDIT_CONTENT
+class NFTEditContentBody(TlbScheme):
+    OP_CODE = OpCode.NFT_EDIT_CONTENT
 
     def __init__(
         self,
@@ -495,7 +495,7 @@ class NFTItemEditableEditContentBody(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTItemEditableEditContentBody:
+    def deserialize(cls, cs: Slice) -> NFTEditContentBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(
@@ -505,8 +505,8 @@ class NFTItemEditableEditContentBody(TlbScheme):
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTItemEditableTransferEditorshipBody(TlbScheme):
-    OP_CODE = OpCode.NFT_ITEM_TRANSFER_EDITORSHIP
+class NFTTransferEditorshipBody(TlbScheme):
+    OP_CODE = OpCode.NFT_TRANSFER_EDITORSHIP
 
     def __init__(
         self,
@@ -536,7 +536,7 @@ class NFTItemEditableTransferEditorshipBody(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTItemEditableTransferEditorshipBody:
+    def deserialize(cls, cs: Slice) -> NFTTransferEditorshipBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(
@@ -550,8 +550,8 @@ class NFTItemEditableTransferEditorshipBody(TlbScheme):
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTItemSoulboundDestoryBody(TlbScheme):
-    OP_CODE = OpCode.NFT_ITEM_DESTORY
+class NFTDestoryBody(TlbScheme):
+    OP_CODE = OpCode.NFT_DESTORY
 
     def __init__(self, query_id: int = 0) -> None:
         self.query_id = query_id
@@ -563,15 +563,15 @@ class NFTItemSoulboundDestoryBody(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTItemSoulboundDestoryBody:
+    def deserialize(cls, cs: Slice) -> NFTDestoryBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(query_id=cs.load_uint(64))
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTItemSoulboundRevokeBody(TlbScheme):
-    OP_CODE = OpCode.NFT_ITEM_REVOKE
+class NFTRevokeBody(TlbScheme):
+    OP_CODE = OpCode.NFT_REVOKE
 
     def __init__(self, query_id: int = 0) -> None:
         self.query_id = query_id
@@ -583,15 +583,15 @@ class NFTItemSoulboundRevokeBody(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTItemSoulboundRevokeBody:
+    def deserialize(cls, cs: Slice) -> NFTRevokeBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(query_id=cs.load_uint(64))
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
 
 
-class NFTItemTransferBody(TlbScheme):
-    OP_CODE = OpCode.NFT_ITEM_TRANSFER
+class NFTTransferBody(TlbScheme):
+    OP_CODE = OpCode.NFT_TRANSFER
 
     def __init__(
         self,
@@ -621,7 +621,7 @@ class NFTItemTransferBody(TlbScheme):
         return cell.end_cell()
 
     @classmethod
-    def deserialize(cls, cs: Slice) -> NFTItemTransferBody:
+    def deserialize(cls, cs: Slice) -> NFTTransferBody:
         op_code = cs.load_uint(32)
         if op_code == cls.OP_CODE:
             return cls(
