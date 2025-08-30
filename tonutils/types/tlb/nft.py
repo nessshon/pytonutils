@@ -350,6 +350,7 @@ class NFTCollectionMintItemBody(TlbScheme):
 
 class NFTCollectionBatchMintItemBody(TlbScheme):
     OP_CODE = 2
+    MAX_BATCH_ITEMS = 249
 
     def __init__(
         self,
@@ -358,6 +359,13 @@ class NFTCollectionBatchMintItemBody(TlbScheme):
         forward_amount: int,
         query_id: int = 0,
     ) -> None:
+        n = len(items_refs)
+        if n > self.MAX_BATCH_ITEMS:
+            raise ValueError(
+                f"Batch mint limit exceeded: got {n} items, "
+                f"but maximum allowed is {self.MAX_BATCH_ITEMS}."
+            )
+
         self.items_refs = items_refs
         self.from_index = from_index
         self.forward_amount = forward_amount
@@ -515,7 +523,7 @@ class NFTItemEditableTransferEditorshipBody(TlbScheme):
         self.forward_amount = forward_amount
         self.query_id = query_id
 
-    def serialize(self, cs: Slice) -> Cell:
+    def serialize(self) -> Cell:
         cell = begin_cell()
         cell.store_uint(self.OP_CODE, 32)
         cell.store_uint(self.query_id, 64)

@@ -3,6 +3,10 @@ from .collection import (
     NFTCollectionEditable,
     NFTCollectionStandard,
 )
+from .get_methods import (
+    NFTCollectionGetMethods,
+    NFTItemGetMethods,
+)
 from .item import (
     BaseNFTItem,
     NFTItemEditable,
@@ -13,6 +17,8 @@ from .item import (
 __all__ = [
     "BaseNFTCollection",
     "BaseNFTItem",
+    "NFTCollectionGetMethods",
+    "NFTItemGetMethods",
     "NFTCollectionEditable",
     "NFTCollectionStandard",
     "NFTItemEditable",

@@ -15,7 +15,6 @@ from ...types import (
     NFTCollectionContent,
     NFTCollectionData,
     NFTCollectionVersion,
-    NFTItemVersion,
     MetadataPrefix,
     OnchainContent,
     OffchainContent,
@@ -27,7 +26,6 @@ from ...utils import to_cell
 
 class BaseNFTCollection(BaseContract[NFTCollectionData]):
     _data_model = NFTCollectionData
-    NFT_ITEM_VERSION: NFTItemVersion
 
     @property
     def owner_address(self) -> Address:
