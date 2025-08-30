@@ -185,7 +185,7 @@ class TestUtils(TestCase):
         with self.assertRaises(ValueError):
             to_amount(-1, decimals)
         with self.assertRaises(ValueError):
-            to_amount(2 ** 256, decimals)
+            to_amount(2**256, decimals)
         with self.assertRaises(ValueError):
             to_amount(1, -1)
 

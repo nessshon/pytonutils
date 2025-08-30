@@ -12,6 +12,11 @@ from tonutils.contracts import (
 )
 from tonutils.types import (
     ClientType,
+    NFTCollectionContent,
+    NFTCollectionData,
+    NFTItemEditableData,
+    NFTItemStandardData,
+    NFTItemSoulboundData,
     OffchainContent,
     OffchainItemContent,
 )
@@ -25,6 +30,7 @@ NFT_COLLECTION_EDITABLE_ADDRESS = Address(
 NFT_COLLECTION_SOULBOUND_ADDRESS = Address(
     "EQCsiaV6k0-EZvl5AyurAjNYqvT6FhGX83xYlKlU5isWt6ki"
 )
+
 
 NFT_ITEM_STANDARD_ADDRESS = Address("EQCoADmGFboLrgOCDSwAe-jI-lOOVoRYllA5F4WeIMokINW8")
 NFT_ITEM_EDITABLE_ADDRESS = Address("EQCSAPwp9B8IioWbjYf5w9YTzNlLdk_ntvNvjVtFkp9TGyno")
@@ -49,23 +55,44 @@ class TestsNFTContractsTonapi(ClientTestCase):
             client=self.client,
             address=NFT_COLLECTION_STANDARD_ADDRESS,
         )
+        self.assertIsInstance(
+            self.nft_collection_standard.content, NFTCollectionContent
+        )
+        self.assertIsInstance(
+            self.nft_collection_standard.state_data, NFTCollectionData
+        )
+
         self.nft_collection_editable = await NFTCollectionEditable.from_address(
             client=self.client,
             address=NFT_COLLECTION_EDITABLE_ADDRESS,
+        )
+        self.assertIsInstance(
+            self.nft_collection_editable.content, NFTCollectionContent
+        )
+        self.assertIsInstance(
+            self.nft_collection_editable.state_data, NFTCollectionData
         )
 
         self.nft_item_standard: NFTItemStandard = await NFTItemStandard.from_address(
             client=self.client,
             address=NFT_ITEM_STANDARD_ADDRESS,
         )
+        self.assertIsInstance(self.nft_item_standard.content, OffchainItemContent)
+        self.assertIsInstance(self.nft_item_standard.state_data, NFTItemStandardData)
+
         self.nft_item_editable: NFTItemEditable = await NFTItemEditable.from_address(
             client=self.client,
             address=NFT_ITEM_EDITABLE_ADDRESS,
         )
+        self.assertIsInstance(self.nft_item_editable.content, OffchainItemContent)
+        self.assertIsInstance(self.nft_item_editable.state_data, NFTItemEditableData)
+
         self.nft_item_soulbound: NFTItemSoulbound = await NFTItemSoulbound.from_address(
             client=self.client,
             address=NFT_ITEM_SOULBOUND_ADDRESS,
         )
+        self.assertIsInstance(self.nft_item_soulbound.content, OffchainItemContent)
+        self.assertIsInstance(self.nft_item_soulbound.state_data, NFTItemSoulboundData)
 
     async def test_nft_collection_get_collection_data(self) -> None:
         next_item_index, content, owner_address = (
