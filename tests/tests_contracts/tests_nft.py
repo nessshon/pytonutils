@@ -56,21 +56,24 @@ class TestsNFTContractsTonapi(ClientTestCase):
             address=NFT_COLLECTION_STANDARD_ADDRESS,
         )
         self.assertIsInstance(
-            self.nft_collection_standard.content, NFTCollectionContent
+            self.nft_collection_standard.content,
+            NFTCollectionContent,
         )
         self.assertIsInstance(
-            self.nft_collection_standard.state_data, NFTCollectionData
+            self.nft_collection_standard.state_data,
+            NFTCollectionData,
         )
-
         self.nft_collection_editable = await NFTCollectionEditable.from_address(
             client=self.client,
             address=NFT_COLLECTION_EDITABLE_ADDRESS,
         )
         self.assertIsInstance(
-            self.nft_collection_editable.content, NFTCollectionContent
+            self.nft_collection_editable.content,
+            NFTCollectionContent,
         )
         self.assertIsInstance(
-            self.nft_collection_editable.state_data, NFTCollectionData
+            self.nft_collection_editable.state_data,
+            NFTCollectionData,
         )
 
         self.nft_item_standard: NFTItemStandard = await NFTItemStandard.from_address(
