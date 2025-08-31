@@ -595,26 +595,26 @@ class NFTTransferBody(TlbScheme):
 
     def __init__(
         self,
-        owner_address: AddressLike,
+        destination_address: AddressLike,
         response_address: t.Optional[AddressLike] = None,
         custom_payload: t.Optional[Cell] = None,
         forward_payload: t.Optional[Cell] = None,
         forward_amount: int = 1,
         query_id: int = 0,
     ) -> None:
-        self.owner_address = owner_address
+        self.query_id = query_id
+        self.destination_address = destination_address
         self.response_address = response_address
         self.custom_payload = custom_payload
-        self.forward_payload = forward_payload
         self.forward_amount = forward_amount
-        self.query_id = query_id
+        self.forward_payload = forward_payload
 
     def serialize(self) -> Cell:
         cell = begin_cell()
         cell.store_uint(self.OP_CODE, 32)
         cell.store_uint(self.query_id, 64)
-        cell.store_address(self.owner_address)
-        cell.store_address(self.response_address or self.owner_address)
+        cell.store_address(self.destination_address)
+        cell.store_address(self.response_address)
         cell.store_maybe_ref(self.custom_payload)
         cell.store_coins(self.forward_amount)
         cell.store_maybe_ref(self.forward_payload)
@@ -626,7 +626,7 @@ class NFTTransferBody(TlbScheme):
         if op_code == cls.OP_CODE:
             return cls(
                 query_id=cs.load_uint(64),
-                owner_address=cs.load_address(),
+                destination_address=cs.load_address(),
                 response_address=cs.load_address(),
                 custom_payload=cs.load_maybe_ref(),
                 forward_amount=cs.load_coins(),

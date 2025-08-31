@@ -9,9 +9,9 @@ from pytoniq_core import (
     TlbScheme,
 )
 
-from .. import OpCode
 from ...exceptions import UnexpectedOpCodeError
 from ...types.common import AddressLike
+from ...types.opcodes import OpCode
 from ...types.tlb.content import (
     ContentLike,
     MetadataPrefix,
@@ -69,9 +69,9 @@ class JettonMasterStablecoinData(BaseContractData):
     def __init__(
         self,
         admin_address: AddressLike,
-        next_admin_address: AddressLike,
         jetton_wallet_code: Cell,
         content: OffchainContent,
+        next_admin_address: t.Optional[AddressLike] = None,
         total_supply: int = 0,
     ) -> None:
         super().__init__()
@@ -196,33 +196,98 @@ class JettonWalletStablecoinV2Data(BaseContractData):
         )
 
 
-class JettonTransferBody(TlbScheme):
-    OP_CODE = OpCode.JETTON_TRANSFER
+class JettonTopUpBody(TlbScheme):
+    OP_CODE = OpCode.JETTON_TOP_UP
 
-    def __init__(
-        self,
-        jetton_amount: int,
-        recipient_address: AddressLike,
-        response_address: t.Optional[AddressLike],
-        custom_payload: t.Optional[Cell] = None,
-        forward_payload: t.Optional[Cell] = None,
-        forward_amount: int = 1,
-        query_id: int = 0,
-    ) -> None:
-        self.jetton_amount = jetton_amount
-        self.recipient_address = recipient_address
-        self.response_address = response_address
-        self.custom_payload = custom_payload
-        self.forward_payload = forward_payload
-        self.forward_amount = forward_amount
+    def __init__(self, query_id: int = 0) -> None:
         self.query_id = query_id
 
     def serialize(self) -> Cell:
         cell = begin_cell()
         cell.store_uint(self.OP_CODE, 32)
         cell.store_uint(self.query_id, 64)
+        return cell.end_cell()
+
+    @classmethod
+    def deserialize(cls, cs: Slice) -> JettonTopUpBody:
+        op_code = cs.load_uint(32)
+        if op_code == cls.OP_CODE:
+            return cls(query_id=cs.load_uint(64))
+        raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
+
+
+class JettonInternalTransferBody(TlbScheme):
+    OP_CODE = OpCode.JETTON_INTERNAL_TRANSFER
+
+    def __init__(
+        self,
+        jetton_amount: int,
+        forward_amount: int,
+        from_address: t.Optional[AddressLike] = None,
+        response_address: t.Optional[AddressLike] = None,
+        forward_payload: t.Optional[Cell] = None,
+        query_id: int = 0,
+    ) -> None:
+        self.query_id = query_id
+        self.jetton_amount = jetton_amount
+        self.from_address = from_address
+        self.response_address = response_address
+        self.forward_amount = forward_amount
+        self.forward_payload = forward_payload
+
+    def serialize(self) -> Cell:
+        cell = begin_cell()
+        cell.store_uint(self.OP_CODE, 32)
+        cell.store_uint(self.query_id, 64)
         cell.store_coins(self.jetton_amount)
-        cell.store_address(self.recipient_address)
+        cell.store_address(self.from_address)
+        cell.store_address(self.response_address)
+        cell.store_coins(self.forward_amount)
+        cell.store_maybe_ref(self.forward_payload)
+        return cell.end_cell()
+
+    @classmethod
+    def deserialize(cls, cs: Slice) -> JettonInternalTransferBody:
+        op_code = cs.load_uint(32)
+        if op_code == cls.OP_CODE:
+            return cls(
+                query_id=cs.load_uint(64),
+                jetton_amount=cs.load_coins(),
+                from_address=cs.load_address(),
+                response_address=cs.load_address(),
+                forward_amount=cs.load_coins(),
+                forward_payload=cs.load_maybe_ref(),
+            )
+        raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
+
+
+class JettonTransferBody(TlbScheme):
+    OP_CODE = OpCode.JETTON_TRANSFER
+
+    def __init__(
+        self,
+        jetton_amount: int,
+        destination_address: AddressLike,
+        response_address: t.Optional[AddressLike] = None,
+        custom_payload: t.Optional[Cell] = None,
+        forward_payload: t.Optional[Cell] = None,
+        forward_amount: int = 1,
+        query_id: int = 0,
+    ) -> None:
+        self.query_id = query_id
+        self.jetton_amount = jetton_amount
+        self.destination_address = destination_address
+        self.response_address = response_address
+        self.custom_payload = custom_payload
+        self.forward_amount = forward_amount
+        self.forward_payload = forward_payload
+
+    def serialize(self) -> Cell:
+        cell = begin_cell()
+        cell.store_uint(self.OP_CODE, 32)
+        cell.store_uint(self.query_id, 64)
+        cell.store_coins(self.jetton_amount)
+        cell.store_address(self.destination_address)
         cell.store_address(self.response_address)
         cell.store_maybe_ref(self.custom_payload)
         cell.store_coins(self.forward_amount)
@@ -236,10 +301,49 @@ class JettonTransferBody(TlbScheme):
             return cls(
                 query_id=cs.load_uint(64),
                 jetton_amount=cs.load_coins(),
-                recipient_address=cs.load_address(),
+                destination_address=cs.load_address(),
                 response_address=cs.load_address(),
                 custom_payload=cs.load_maybe_ref(),
                 forward_amount=cs.load_coins(),
                 forward_payload=cs.load_maybe_ref(),
+            )
+        raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)
+
+
+class JettonMintBody(TlbScheme):
+    OP_CODE = OpCode.JETTON_MINT
+
+    def __init__(
+        self,
+        destination_address: AddressLike,
+        internal_transfer: JettonInternalTransferBody,
+        forward_amount: int,
+        query_id: int = 0,
+    ) -> None:
+        self.query_id = query_id
+        self.destination_address = destination_address
+        self.forward_amount = forward_amount
+        self.internal_transfer = internal_transfer
+
+    def serialize(self) -> Cell:
+        cell = begin_cell()
+        cell.store_uint(self.OP_CODE, 32)
+        cell.store_uint(self.query_id, 64)
+        cell.store_address(self.destination_address)
+        cell.store_coins(self.forward_amount)
+        cell.store_ref(self.internal_transfer.serialize())
+        return cell.end_cell()
+
+    @classmethod
+    def deserialize(cls, cs: Slice) -> JettonMintBody:
+        op_code = cs.load_uint(32)
+        if op_code == cls.OP_CODE:
+            return cls(
+                query_id=cs.load_uint(64),
+                destination_address=cs.load_address(),
+                total_amount=cs.load_coins(),
+                internal_transfer=JettonInternalTransferBody.deserialize(
+                    cs.load_ref().begin_parse()
+                ),
             )
         raise UnexpectedOpCodeError(cls, cls.OP_CODE, op_code)

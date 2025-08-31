@@ -65,8 +65,12 @@ from .tlb import (
     BaseContractData,
     BaseWalletData,
     ContentLike,
+    JettonMintBody,
     JettonMasterStandardData,
     JettonMasterStablecoinData,
+    JettonTopUpBody,
+    JettonInternalTransferBody,
+    JettonTransferBody,
     JettonWalletStandardData,
     JettonWalletStablecoinData,
     JettonWalletStablecoinV2Data,
@@ -107,7 +111,6 @@ from .tlb import (
     WalletV5SubwalletID,
 )
 
-
 __all__ = [
     "DEFAULT_SUBWALLET_ID",
     "AddressLike",
@@ -122,9 +125,13 @@ __all__ = [
     "ContractState",
     "ContentLike",
     "EncryptedTextComment",
+    "JettonMintBody",
     "JettonMasterStandardData",
     "JettonMasterStablecoinData",
     "JettonMasterVersion",
+    "JettonTopUpBody",
+    "JettonInternalTransferBody",
+    "JettonTransferBody",
     "JettonWalletStandardData",
     "JettonWalletStablecoinData",
     "JettonWalletStablecoinV2Data",

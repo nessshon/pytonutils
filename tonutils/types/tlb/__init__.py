@@ -5,8 +5,12 @@ from .content import (
 )
 from .contract import BaseContractData
 from .jetton import (
+    JettonMintBody,
     JettonMasterStandardData,
     JettonMasterStablecoinData,
+    JettonTopUpBody,
+    JettonInternalTransferBody,
+    JettonTransferBody,
     JettonWalletStandardData,
     JettonWalletStablecoinData,
     JettonWalletStablecoinV2Data,
@@ -58,8 +62,12 @@ __all__ = [
     "BaseWalletData",
     "ContentLike",
     "EncryptedTextComment",
+    "JettonMintBody",
     "JettonMasterStandardData",
     "JettonMasterStablecoinData",
+    "JettonTopUpBody",
+    "JettonInternalTransferBody",
+    "JettonTransferBody",
     "JettonWalletStandardData",
     "JettonWalletStablecoinData",
     "JettonWalletStablecoinV2Data",
