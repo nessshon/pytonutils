@@ -4,7 +4,7 @@ from tonutils.clients import ToncenterClient
 from tonutils.contracts import WalletV4R2
 from tonutils.types import (
     JettonInternalTransferBody,
-    JettonMintBody,
+    JettonStandardMintBody,
 )
 from tonutils.utils import to_nano
 
@@ -22,18 +22,18 @@ async def main() -> None:
     client = ToncenterClient(is_testnet=IS_TESTNET, rps=1)
     wallet, _, _, _ = WalletV4R2.from_mnemonic(client, MNEMONIC)
 
-    body = JettonMintBody(
+    body = JettonStandardMintBody(
         internal_transfer=JettonInternalTransferBody(
             jetton_amount=JETTON_AMOUNT_TO_MINT,
             response_address=wallet.address,
             forward_amount=1,
         ),
         destination_address=DESTINATION_ADDRESS,
-        forward_amount=to_nano(0.1),
+        forward_amount=to_nano(0.05),
     )
     tx_hash = await wallet.transfer(
         destination=JETTON_MASTER_ADDRESS,
-        amount=to_nano(0.125),
+        amount=to_nano(0.075),
         body=body.serialize(),
     )
 

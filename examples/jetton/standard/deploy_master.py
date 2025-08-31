@@ -2,14 +2,14 @@ from pytoniq_core import Address
 
 from tonutils.clients import ToncenterClient
 from tonutils.contracts import (
-    JettonMasterStablecoinV2,
-    JettonWalletStablecoinV2,
+    JettonMasterStandard,
+    JettonWalletStandard,
     WalletV4R2,
 )
 from tonutils.types import (
-    OffchainContent,
-    JettonMasterStablecoinData,
+    JettonMasterStandardData,
     JettonTopUpBody,
+    OffchainContent,
 )
 from tonutils.utils import to_nano
 
@@ -27,15 +27,15 @@ async def main() -> None:
     client = ToncenterClient(is_testnet=IS_TESTNET, rps=1)
     wallet, _, _, _ = WalletV4R2.from_mnemonic(client, MNEMONIC)
 
-    jetton_wallet_code = JettonWalletStablecoinV2.get_default_code()
+    jetton_wallet_code = JettonWalletStandard.get_default_code()
     jetton_master_content = OffchainContent(uri=JETTON_MASTER_URI)
 
-    jetton_master_data = JettonMasterStablecoinData(
+    jetton_master_data = JettonMasterStandardData(
         admin_address=ADMIN_ADDRESS,
         content=jetton_master_content,
         jetton_wallet_code=jetton_wallet_code,
     )
-    jetton_master = JettonMasterStablecoinV2.from_data(
+    jetton_master: JettonMasterStandard = JettonMasterStandard.from_data(
         client=client,
         data=jetton_master_data.serialize(),
     )
