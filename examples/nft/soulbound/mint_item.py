@@ -1,3 +1,5 @@
+from pytoniq_core import Address
+
 from tonutils.clients import ToncenterClient
 from tonutils.contracts import (
     NFTCollectionStandard,
@@ -15,9 +17,9 @@ IS_TESTNET = True
 
 MNEMONIC = "word1 word2 word3 ..."
 
-OWNER_ADDRESS = "UQ..."
-AUTHORITY_ADDRESS = "UQ..."
-NFT_COLLECTION_ADDRESS = "EQ..."
+OWNER_ADDRESS = Address("UQ...")
+AUTHORITY_ADDRESS = Address("UQ...")
+NFT_COLLECTION_ADDRESS = Address("EQ...")
 
 NFT_ITEM_INDEX = 0
 NFT_ITEM_PREFIX_URI = f"{NFT_ITEM_INDEX}.json"

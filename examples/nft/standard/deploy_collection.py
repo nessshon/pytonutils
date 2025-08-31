@@ -1,3 +1,5 @@
+from pytoniq_core import Address
+
 from tonutils.clients import ToncenterClient
 from tonutils.contracts import (
     NFTCollectionStandard,
@@ -17,8 +19,8 @@ IS_TESTNET = True
 
 MNEMONIC = "word1 word2 word3 ..."
 
-OWNER_ADDRESS = "UQ..."
-ROYALTY_ADDRESS = "UQ..."
+OWNER_ADDRESS = Address("UQ...")
+ROYALTY_ADDRESS = Address("UQ...")
 
 # https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#nft-collection-metadata-example-offchain
 COLLECTION_URI = "https://example.com/collection.json"

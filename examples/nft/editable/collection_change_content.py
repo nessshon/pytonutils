@@ -15,9 +15,9 @@ IS_TESTNET = True
 
 MNEMONIC = "word1 word2 word3 ..."
 
-OWNER_ADDRESS = "UQ..."
-ROYALTY_ADDRESS = "UQ..."
-NFT_COLLECTION_ADDRESS = "EQ..."
+OWNER_ADDRESS = Address("UQ...")
+ROYALTY_ADDRESS = Address("UQ...")
+NFT_COLLECTION_ADDRESS = Address("EQ...")
 
 # https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#nft-collection-metadata-example-offchain
 COLLECTION_URI = "https://example.com/collection.json"
@@ -51,9 +51,7 @@ async def main() -> None:
         amount=to_nano(0.05),
     )
 
-    nft_collection_address = Address(NFT_COLLECTION_ADDRESS).to_str(
-        is_test_only=IS_TESTNET
-    )
+    nft_collection_address = NFT_COLLECTION_ADDRESS.to_str(is_test_only=IS_TESTNET)
 
     print(f"NFT collection address: {nft_collection_address}")
     print(f"Transaction hash: {tx_hash}")

@@ -9,7 +9,7 @@ IS_TESTNET = True
 
 MNEMONIC = "word1 word2 word3 ..."
 
-NFT_ITEM_ADDRESS = "EQ..."
+NFT_ITEM_ADDRESS = Address("EQ...")
 
 
 async def main() -> None:
@@ -24,7 +24,7 @@ async def main() -> None:
         amount=to_nano(0.05),
     )
 
-    nft_item_address = Address(NFT_ITEM_ADDRESS).to_str(is_test_only=IS_TESTNET)
+    nft_item_address = NFT_ITEM_ADDRESS.to_str(is_test_only=IS_TESTNET)
 
     print(f"NFT item address: {nft_item_address}")
     print(f"Transaction hash: {tx_hash}")

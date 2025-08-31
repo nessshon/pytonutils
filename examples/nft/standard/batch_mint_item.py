@@ -1,3 +1,5 @@
+from pytoniq_core import Address
+
 from tonutils.clients import ToncenterClient
 from tonutils.contracts import (
     NFTCollectionStandard,
@@ -15,12 +17,12 @@ IS_TESTNET = True
 
 MNEMONIC = "word1 word2 word3 ..."
 
-NFT_COLLECTION_ADDRESS = "EQ..."
+NFT_COLLECTION_ADDRESS = Address("EQ...")
 
 MINT_FROM_INDEX = 0
 NFT_ITEM_OWNERS = [
-    "UQ...",
-    "UQ...",
+    Address("UQ..."),
+    Address("UQ..."),
 ]
 FORWARD_AMOUNT_PER_ITEM = to_nano(0.05)
 
