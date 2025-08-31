@@ -313,7 +313,7 @@ class NFTItemSoulboundMintRef(TlbScheme):
 
 
 class NFTCollectionMintItemBody(TlbScheme):
-    OP_CODE = 1
+    OP_CODE: t.Union[OpCode, int] = 1
 
     def __init__(
         self,
@@ -350,7 +350,7 @@ class NFTCollectionMintItemBody(TlbScheme):
 
 
 class NFTCollectionBatchMintItemBody(TlbScheme):
-    OP_CODE = 2
+    OP_CODE: t.Union[OpCode, int] = 2
     MAX_BATCH_ITEMS = 249
 
     def __init__(
@@ -415,7 +415,7 @@ class NFTCollectionBatchMintItemBody(TlbScheme):
 
 
 class NFTCollectionChangeOwnerBody(TlbScheme):
-    OP_CODE = 3
+    OP_CODE: t.Union[OpCode, int] = 3
 
     def __init__(
         self,
@@ -444,7 +444,7 @@ class NFTCollectionChangeOwnerBody(TlbScheme):
 
 
 class NFTCollectionChangeContentBody(TlbScheme):
-    OP_CODE = 4
+    OP_CODE: t.Union[OpCode, int] = 4
 
     def __init__(
         self,
@@ -477,7 +477,7 @@ class NFTCollectionChangeContentBody(TlbScheme):
 
 
 class NFTEditContentBody(TlbScheme):
-    OP_CODE = OpCode.NFT_EDIT_CONTENT
+    OP_CODE: t.Union[OpCode, int] = OpCode.NFT_EDIT_CONTENT
 
     def __init__(
         self,
@@ -506,7 +506,7 @@ class NFTEditContentBody(TlbScheme):
 
 
 class NFTTransferEditorshipBody(TlbScheme):
-    OP_CODE = OpCode.NFT_TRANSFER_EDITORSHIP
+    OP_CODE: t.Union[OpCode, int] = OpCode.NFT_TRANSFER_EDITORSHIP
 
     def __init__(
         self,
@@ -551,7 +551,7 @@ class NFTTransferEditorshipBody(TlbScheme):
 
 
 class NFTDestoryBody(TlbScheme):
-    OP_CODE = OpCode.NFT_DESTORY
+    OP_CODE: t.Union[OpCode, int] = OpCode.NFT_DESTORY
 
     def __init__(self, query_id: int = 0) -> None:
         self.query_id = query_id
@@ -571,7 +571,7 @@ class NFTDestoryBody(TlbScheme):
 
 
 class NFTRevokeBody(TlbScheme):
-    OP_CODE = OpCode.NFT_REVOKE
+    OP_CODE: t.Union[OpCode, int] = OpCode.NFT_REVOKE
 
     def __init__(self, query_id: int = 0) -> None:
         self.query_id = query_id
@@ -591,7 +591,7 @@ class NFTRevokeBody(TlbScheme):
 
 
 class NFTTransferBody(TlbScheme):
-    OP_CODE = OpCode.NFT_TRANSFER
+    OP_CODE: t.Union[OpCode, int] = OpCode.NFT_TRANSFER
 
     def __init__(
         self,
