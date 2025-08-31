@@ -74,7 +74,7 @@ class WalletHighloadV3Params(BaseWalletParams):
 
     def __post_init__(self) -> None:
         if self.created_at is None:
-            self.created_at = int(time.time() - 30)
+            self.created_at = int(time.time() - 60)
         if self.query_id is None:
             self.query_id = (self.created_at % (1 << 23)) & 0xFFFFFFFF
 
