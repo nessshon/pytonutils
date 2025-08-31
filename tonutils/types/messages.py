@@ -9,15 +9,17 @@ from pytoniq_core import (
 )
 
 from ..types.common import AddressLike, SendMode
+from ..types.tlb.jetton import JettonTransferBody
+from ..types.tlb.nft import NFTTransferBody
 from ..types.tlb.text import TextComment
 from ..utils.value_utils import to_nano
 
 if t.TYPE_CHECKING:
     from ..protocols import WalletProtocol
 
-    W = t.TypeVar("W", bound=WalletProtocol)
+    Wallet = WalletProtocol
 else:
-    W = t.TypeVar("W")
+    Wallet = t.Any
 
 
 class BaseTransferMessage(abc.ABC):
@@ -25,8 +27,12 @@ class BaseTransferMessage(abc.ABC):
     @abc.abstractmethod
     async def to_wallet_msg(
         self,
-        wallet: W,
+        wallet: Wallet,
     ) -> WalletMessage: ...
+
+    def __repr__(self) -> str:
+        parts = " ".join(f"{k}: {v!r}" for k, v in vars(self).items())
+        return f"< {self.__class__.__name__} {parts} >"
 
 
 class TransferMessage(BaseTransferMessage):
@@ -40,8 +46,6 @@ class TransferMessage(BaseTransferMessage):
         send_mode: t.Optional[t.Union[SendMode, int]] = None,
         bounce: t.Optional[bool] = None,
     ) -> None:
-        if isinstance(destination, str):
-            destination = Address(destination)
         if isinstance(body, str):
             body = TextComment(body).serialize()
 
@@ -54,7 +58,7 @@ class TransferMessage(BaseTransferMessage):
 
     async def to_wallet_msg(
         self,
-        wallet: W,
+        wallet: Wallet,
     ) -> WalletMessage:
         from ..utils.msg_builders import build_internal_wallet_msg
 
@@ -75,31 +79,46 @@ class TransferNFTMessage(BaseTransferMessage):
         destination: AddressLike,
         nft_address: AddressLike,
         response_address: t.Optional[AddressLike] = None,
+        custom_payload: t.Optional[t.Union[Cell]] = None,
+        forward_amount: int = 1,
         forward_payload: t.Optional[t.Union[Cell, str]] = None,
-        forward_amount: t.Union[int, float] = 1,
-        amount: t.Union[int, float] = to_nano(0.05),
+        total_amount: int = to_nano(0.05),
         send_mode: t.Optional[t.Union[SendMode, int]] = None,
         bounce: t.Optional[bool] = None,
     ) -> None:
-        if isinstance(nft_address, str):
-            nft_address = Address(nft_address)
         if isinstance(forward_payload, str):
             forward_payload = TextComment(forward_payload).serialize()
 
-        self.destination = destination
+        self.destination_address = destination
         self.nft_address = nft_address
         self.response_address = response_address
-        self.forward_payload = forward_payload
+        self.custom_payload = custom_payload
         self.forward_amount = forward_amount
-        self.amount = amount
+        self.forward_payload = forward_payload
+        self.total_amount = total_amount
         self.send_mode = send_mode
         self.bounce = bounce
 
     async def to_wallet_msg(
         self,
-        wallet: W,
+        wallet: Wallet,
     ) -> WalletMessage:
-        raise NotImplementedError
+        from ..utils.msg_builders import build_internal_wallet_msg
+
+        body = NFTTransferBody(
+            destination_address=self.destination_address,
+            response_address=self.response_address or wallet.address,
+            custom_payload=self.custom_payload,
+            forward_amount=self.forward_amount,
+            forward_payload=self.forward_payload,
+        )
+        return build_internal_wallet_msg(
+            dest=self.nft_address,
+            send_mode=self.send_mode,
+            value=self.total_amount,
+            body=body.serialize(),
+            bounce=self.bounce,
+        )
 
 
 class TransferJettonMessage(BaseTransferMessage):
@@ -107,36 +126,62 @@ class TransferJettonMessage(BaseTransferMessage):
     def __init__(
         self,
         destination: AddressLike,
+        jetton_amount: int,
         jetton_master_address: AddressLike,
-        jetton_amount: t.Union[int, float],
-        jetton_decimals: int = 9,
         jetton_wallet_address: t.Optional[AddressLike] = None,
+        response_address: t.Optional[AddressLike] = None,
+        custom_payload: t.Optional[Cell] = None,
+        forward_amount: int = 1,
         forward_payload: t.Optional[t.Union[Cell, str]] = None,
-        forward_amount: t.Union[int, float] = 1,
-        amount: t.Union[int, float] = to_nano(0.05),
+        total_amount: int = to_nano(0.05),
         send_mode: t.Optional[t.Union[SendMode, int]] = None,
         bounce: t.Optional[bool] = None,
     ) -> None:
-        if isinstance(jetton_master_address, str):
-            jetton_master_address = Address(jetton_master_address)
-        if isinstance(jetton_wallet_address, str):
-            jetton_wallet_address = Address(jetton_wallet_address)
         if isinstance(forward_payload, str):
             forward_payload = TextComment(forward_payload).serialize()
 
-        self.destination = destination
-        self.jetton_master_address = jetton_master_address
+        self.destination_address = destination
         self.jetton_amount = jetton_amount
-        self.jetton_decimals = jetton_decimals
+        self.jetton_master_address = jetton_master_address
         self.jetton_wallet_address = jetton_wallet_address
-        self.forward_payload = forward_payload
+        self.response_address = response_address
+        self.custom_payload = custom_payload
         self.forward_amount = forward_amount
-        self.amount = amount
+        self.forward_payload = forward_payload
+        self.total_amount = total_amount
         self.send_mode = send_mode
         self.bounce = bounce
 
+    async def _get_jetton_wallet_address(self, wallet: Wallet) -> Address:
+        from ..contracts import JettonMasterGetMethods
+
+        return await JettonMasterGetMethods.get_wallet_address(
+            client=wallet.client,
+            address=self.jetton_master_address,
+            owner_address=wallet.address,
+        )
+
     async def to_wallet_msg(
         self,
-        wallet: W,
+        wallet: Wallet,
     ) -> WalletMessage:
-        raise NotImplementedError
+        from ..utils.msg_builders import build_internal_wallet_msg
+
+        if self.jetton_wallet_address is None:
+            self.jetton_wallet_address = await self._get_jetton_wallet_address(wallet)
+
+        body = JettonTransferBody(
+            jetton_amount=self.jetton_amount,
+            destination_address=self.destination_address,
+            response_address=self.response_address or wallet.address,
+            custom_payload=self.custom_payload,
+            forward_amount=self.forward_amount,
+            forward_payload=self.forward_payload,
+        )
+        return build_internal_wallet_msg(
+            dest=self.jetton_wallet_address,
+            send_mode=self.send_mode,
+            value=self.total_amount,
+            body=body.serialize(),
+            bounce=self.bounce,
+        )
