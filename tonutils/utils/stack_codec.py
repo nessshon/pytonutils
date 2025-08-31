@@ -162,9 +162,11 @@ class StackCodec:
                 if callback is not None:
                     if isinstance(item, int):
                         tpe = StackItemType.NUM
+                    elif isinstance(item, Address):
+                        tpe = StackItemType.TVMSLICE
                     elif isinstance(item, Slice):
                         tpe = StackItemType.TVMSLICE
-                    elif isinstance(item, (Address, Cell)):
+                    elif isinstance(item, Cell):
                         tpe = StackItemType.TVMCELL
                     else:
                         continue
