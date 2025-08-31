@@ -130,7 +130,7 @@ class JettonMasterStandard(BaseJettonMaster[DStandard, CStandard]):
             client=self.client,
             address=self.address,
         )
-        content_cs: Slice = method_result[3]
+        content_cs: Slice = method_result[3].begin_parse()
         return (
             method_result[0],
             bool(method_result[1]),
