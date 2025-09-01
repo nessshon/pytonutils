@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="tonutils",
-    version="1.0.0a2",
+    version="1.0.0a3",
     author="nessshon",
     description=(
         "Tonutils is a high-level, object-oriented Python library "
