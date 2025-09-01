@@ -139,6 +139,7 @@ __all__ = [
     "JettonMintBody",
     "JettonMasterStandardData",
     "JettonMasterStablecoinData",
+    "JettonMasterVersion",
     "JettonInternalTransferBody",
     "JettonStandardChangeAdminBody",
     "JettonStandardChangeContentBody",
