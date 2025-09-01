@@ -24,7 +24,6 @@ NFT_ITEM_OWNERS_AND_AUTHORITIES = [
     (Address("UQ..."), Address("UQ...")),
     (Address("UQ..."), Address("UQ...")),
 ]
-FORWARD_AMOUNT_PER_ITEM = to_nano(0.05)
 
 
 async def main() -> None:
@@ -48,12 +47,12 @@ async def main() -> None:
     body = NFTCollectionBatchMintItemBody(
         items_refs=nft_items_refs,
         from_index=MINT_FROM_INDEX,
-        forward_amount=FORWARD_AMOUNT_PER_ITEM,
+        forward_amount=to_nano(0.01),
     )
 
     tx_hash = await wallet.transfer(
         destination=NFT_COLLECTION_ADDRESS,
-        amount=FORWARD_AMOUNT_PER_ITEM * nft_items_count,
+        amount=to_nano(0.025) * nft_items_count,
         body=body.serialize(),
     )
 

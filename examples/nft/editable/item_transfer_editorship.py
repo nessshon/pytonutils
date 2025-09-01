@@ -9,8 +9,9 @@ IS_TESTNET = True
 
 MNEMONIC = "word1 word2 word3 ..."
 
-EDITOR_ADDRESS = Address("UQ...")
 NFT_ITEM_ADDRESS = Address("EQ...")
+
+EDITOR_ADDRESS = Address("UQ...")
 
 
 async def main() -> None:

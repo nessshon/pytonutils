@@ -16,7 +16,6 @@ IS_TESTNET = True
 MNEMONIC = "word1 word2 word3 ..."
 
 OWNER_ADDRESS = Address("UQ...")
-ROYALTY_ADDRESS = Address("UQ...")
 NFT_COLLECTION_ADDRESS = Address("EQ...")
 
 # https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#nft-collection-metadata-example-offchain
@@ -25,6 +24,7 @@ ITEMS_SUFFIX_URI = "https://example.com/items/"
 
 ROYALTY = 50  # 5% royalty
 ROYALTY_DENOMINATOR = 1000
+ROYALTY_ADDRESS = Address("UQ...")
 
 
 async def main() -> None:

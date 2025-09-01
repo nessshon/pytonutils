@@ -40,12 +40,12 @@ async def main() -> None:
     body = NFTCollectionMintItemBody(
         item_index=NFT_ITEM_INDEX,
         item_ref=nft_item_ref.serialize(),
-        forward_amount=1,
+        forward_amount=to_nano(0.01),
     )
 
     tx_hash = await wallet.transfer(
         destination=NFT_COLLECTION_ADDRESS,
-        amount=to_nano(0.05),
+        amount=to_nano(0.025),
         body=body.serialize(),
     )
 
