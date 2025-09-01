@@ -81,7 +81,7 @@ class NFTItemStandard(BaseNFTItem[DStandard, C]):
 
 class NFTItemEditable(BaseNFTItem[DEditable, C]):
     _data_model = NFTItemEditableData
-    VERSION = NFTItemVersion.NFTItemStandard
+    VERSION = NFTItemVersion.NFTItemEditable
 
     @property
     def editor_address(self) -> Address:
@@ -96,7 +96,7 @@ class NFTItemEditable(BaseNFTItem[DEditable, C]):
 
 class NFTItemSoulbound(BaseNFTItem[DSoulbound, C]):
     _data_model = NFTItemSoulboundData
-    VERSION = NFTItemVersion.NFTItemStandard
+    VERSION = NFTItemVersion.NFTItemSoulbound
 
     @property
     def authority_address(self) -> t.Optional[Address]:
